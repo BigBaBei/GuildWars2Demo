@@ -9,7 +9,7 @@ import org.json.JSONException;
 import com.example.guildwarseventdemo.constant.CommonConstant;
 import com.example.guildwarseventdemo.entity.Event;
 import com.example.guildwarseventdemo.entity.EventsResult;
-import com.example.guildwarseventdemo.setting.GlobalSetting;
+import com.example.guildwarseventdemo.setting.GlobalSettings;
 import com.example.guildwarseventdemo.utility.HttpRequestUtils;
 
 import android.os.AsyncTask;

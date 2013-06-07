@@ -27,26 +27,6 @@ import com.example.guildwarseventdemo.task.DownLoadEventTask;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends Activity {
       
-//    private TextView m_tv_result = null;
-//    private Button m_btn_get = null;
-//    
-//    private Dialog m_progressDlg = null;
-//    
-//    private OnTaskListener m_listner = new OnTaskListener() {
-//
-//        @SuppressWarnings("unchecked")
-//        @Override
-//        public void onTaskFinished(Object result) {
-//            m_progressDlg.dismiss();
-//            if(result==null) {
-//                m_tv_result.setText("Get results error!");
-//            }
-//            else {
-//                m_tv_result.setText("Total events are "+((ArrayList<EventsResult>)result).size());
-//            }
-//        }
-//        
-//    };
     
     private ListView m_lvLeftDrawer = null;
     private String[] m_panelTitles = new String[] {
@@ -62,20 +42,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-//        m_tv_result = (TextView) findViewById(R.id.id_tv_result);
-//        
-//        m_progressDlg = new Dialog(this,R.style.FullScreenDialog);
-//        m_progressDlg.setContentView(new ProgressBar(this));
-//        
-//        m_btn_get = (Button) findViewById(R.id.id_btn_get);
-//        m_btn_get.setOnClickListener(new OnClickListener(){
-//
-//            @Override
-//            public void onClick(View v) {
-//                m_progressDlg.show();
-//                //-1 for all.
-//                doMyEventStuff(-1);
-//            }});
         init();
     }
 

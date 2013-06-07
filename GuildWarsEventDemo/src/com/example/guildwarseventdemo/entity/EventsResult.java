@@ -1,6 +1,6 @@
 package com.example.guildwarseventdemo.entity;
 
-import com.example.guildwarseventdemo.setting.GlobalSetting;
+import com.example.guildwarseventdemo.setting.GlobalSettings;
 
 /**
  * A class stores the aggregated events' result 
@@ -19,7 +19,7 @@ public class EventsResult {
     }
     
     public EventsResult(String m_name,String e_name,String stat) {
-        this(GlobalSetting.INSTANCE.getWorld(),m_name,e_name,stat,System.currentTimeMillis());
+        this(GlobalSettings.INSTANCE.getWorld(),m_name,e_name,stat,System.currentTimeMillis());
     }
     
     public EventsResult(String w_name,String m_name,String e_name,String stat,long time) {

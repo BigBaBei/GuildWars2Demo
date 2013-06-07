@@ -8,10 +8,10 @@ import android.content.SharedPreferences;
  * @author peng
  *
  */
-public class GlobalSetting {
+public class GlobalSettings {
     public static final String TAG ="GlobalSetting";
     
-    public static final GlobalSetting INSTANCE = new GlobalSetting();
+    public static final GlobalSettings INSTANCE = new GlobalSettings();
     
     public static final String WORLD = "world";
     public static final String VIEWTYPE = "view type";
@@ -34,7 +34,7 @@ public class GlobalSetting {
     
     private static String m_strServer = "";
     
-    private GlobalSetting() {}
+    private GlobalSettings() {}
     
     public void init(Context context) {
         m_context = context;
