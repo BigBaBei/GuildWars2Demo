@@ -5,4 +5,5 @@
     android:layout_height="match_parent"
     android:numColumns="3"
     android:choiceMode="singleChoice"
-    android:stretchMode="spacingWidthUniform"/>
+    android:stretchMode="spacingWidthUniform"
+    android:columnWidth="200dp"/>
