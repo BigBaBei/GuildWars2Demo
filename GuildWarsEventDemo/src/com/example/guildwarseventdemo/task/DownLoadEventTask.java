@@ -57,7 +57,8 @@ public class DownLoadEventTask extends AsyncTask<String, Void, Object> {
             try {
                 for(int i=0;i<params.length;i++) {
                     String jsonReuslt = HttpRequestUtils.getJsonFromUrl(params[i]);
-                    if(i==0) eventresultArray.put(i, HttpRequestUtils.getEventFromJson(jsonReuslt));
+                    //When length <4,it means params contain 1-4 not event,but event entity.
+                    if(params.length==4&&i==0) eventresultArray.put(i, HttpRequestUtils.getEventFromJson(jsonReuslt));
                     else eventresultArray.put(i, HttpRequestUtils.getEventEntityFromJson(jsonReuslt, i));
                 }
                 

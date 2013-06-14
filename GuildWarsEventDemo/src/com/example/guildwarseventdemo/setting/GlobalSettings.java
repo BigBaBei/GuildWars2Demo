@@ -55,6 +55,10 @@ public class GlobalSettings {
         return m_strWorld;
     }
     
+    public void setWorld(String world) {
+        m_strWorld = world;
+    }
+    
     public int getViewType() {
         return m_nViewType;
     }

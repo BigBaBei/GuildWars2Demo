@@ -1,11 +1,6 @@
 package com.example.guildwarseventdemo;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -32,10 +27,20 @@ public class MainActivity extends FragmentActivity {
             "Guild",
             "Wiki"
     };
+    /**
+     * Title of action bar.
+     */
     private String m_title = null;
     
-    
     private FragmentManager m_fragManager = null;
+    
+    private onBackListener m_backListener = null;
+    
+    public void setBackListener(onBackListener l) {
+        m_backListener = l;
+    }
+    
+    private int m_currentPosition = 0;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,18 @@ public class MainActivity extends FragmentActivity {
         super.onPostCreate(savedInstanceState);
         m_drawerToggle.syncState();
     }
+    
+    
+
+    @Override
+    public void onBackPressed() {
+        if(m_currentPosition==0) {
+            //Handle the dynamic events's back event.
+            m_backListener.onCustomBackPressed();
+        }
+        super.onBackPressed();
+    }
+
 
     private void init() {
         m_drawerLayout = (DrawerLayout) findViewById(R.id.id_dl_root);
@@ -106,23 +123,18 @@ public class MainActivity extends FragmentActivity {
 //        getActionBar().setHomeButtonEnabled(true);
     }
     
-    /**
-     * Whether network is ok or not.
-     * @return
-     */
-    private boolean isConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        
-        return networkInfo!=null&&networkInfo.isConnected();
-    }
-    
     private class TitlesClickLitener implements ListView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
+            m_currentPosition = position; 
+            //Close the left panel when clicking the item of list view.
             m_drawerLayout.closeDrawer(m_lvLeftDrawer);
+            
+            //TODO:Always clear the backstack of dynamic events ui when any other ui or reenter it for now.
+            m_fragManager.popBackStack(EventsFragment.STACK_NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            
             selectItem(position);
         }
         
@@ -165,6 +177,10 @@ public class MainActivity extends FragmentActivity {
         
     }
     
+    /**
+     * Set the action bar's title.
+     * @param title
+     */
     private void setTitle(String title) {
         m_title = title;
         getActionBar().setTitle(m_title);
@@ -187,4 +203,15 @@ public class MainActivity extends FragmentActivity {
 //        task.execute(url);
 //    }
     
+    /**
+     * Take care of the back button clicked.
+     * @author peng
+     *
+     */
+    public interface onBackListener {
+        /**
+         * Called when back button is clicked and handle the custom events for different purposes.
+         */
+        void onCustomBackPressed();
+    }
 }

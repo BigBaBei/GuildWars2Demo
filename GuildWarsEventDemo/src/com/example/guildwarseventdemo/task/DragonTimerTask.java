@@ -9,6 +9,7 @@ import org.json.JSONException;
 import com.example.guildwarseventdemo.constant.CommonConstant;
 import com.example.guildwarseventdemo.entity.Event;
 import com.example.guildwarseventdemo.entity.EventsResult;
+import com.example.guildwarseventdemo.interfaces.OnTaskListener;
 import com.example.guildwarseventdemo.setting.GlobalSettings;
 import com.example.guildwarseventdemo.utility.HttpRequestUtils;
 
@@ -21,6 +22,7 @@ import android.os.AsyncTask;
  */
 public class DragonTimerTask extends AsyncTask<String, Void, ArrayList<EventsResult>> {
 
+    
     @Override
     protected ArrayList<EventsResult> doInBackground(String... params) {
         ArrayList<Event> eventList = new ArrayList<Event>();
@@ -45,8 +47,6 @@ public class DragonTimerTask extends AsyncTask<String, Void, ArrayList<EventsRes
     protected void onPostExecute(ArrayList<EventsResult> result) {
         super.onPostExecute(result);
     }
-
-
 
     /**
      * Transfer the event list to event result list.
