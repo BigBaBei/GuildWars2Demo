@@ -1,4 +1,4 @@
-package com.example.guildwarseventdemo.task;
+package com.example.guildwarseventdemo.tasks;
 
 import java.io.IOException;
 import java.util.ArrayList;

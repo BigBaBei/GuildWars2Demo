@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical" >
+    <View android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#CDC9C9"
+        android:layout_margin="2dp"
+        />
+    <ImageButton 
+        android:id="@+id/id_ib_wiki_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wiki_nav_back"
+        android:background="@android:color/transparent"
+        />
+    <ImageButton 
+        android:id="@+id/id_ib_wiki_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/wiki_nav_stop"/>
+    <ImageButton 
+        android:id="@+id/id_ib_wiki_forward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wiki_nav_forward"
+        android:background="@android:color/transparent"/>
+
+</LinearLayout>

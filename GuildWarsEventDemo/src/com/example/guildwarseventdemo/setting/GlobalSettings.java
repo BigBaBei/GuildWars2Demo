@@ -1,5 +1,7 @@
 package com.example.guildwarseventdemo.setting;
 
+import com.example.guildwarseventdemo.constant.CommonConstant;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -19,7 +21,7 @@ public class GlobalSettings {
     public static final String SERVER = "server";
     
     private static final String WORLD_DEFAULT = "";
-    private static final String SERVER_DEFAULT = "";
+    private static final String SERVER_DEFAULT = CommonConstant.SERVER_US;
     
     private static Context m_context;
     
@@ -71,6 +73,9 @@ public class GlobalSettings {
         m_strServer = server;
     }
     
+    /*
+     * Save all the settings.
+     */
     public void saveSettings() {
         m_editor.putString(WORLD, m_strWorld);
         m_editor.putInt(VIEWTYPE, m_nViewType);

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    >
     <FrameLayout android:id="@+id/id_fl_events"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -13,8 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#71C671" 
         />
+    <LinearLayout 
+        android:id="@+id/id_ll_page"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        />
+<!--     android:background="#71C671" -->
+        
     <View 
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -27,11 +36,13 @@
         <Button android:id="@+id/id_btn_us"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="US"/>
+            android:text="US"
+            />
         <Button android:id="@+id/id_btn_eu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="EU"/>
+            android:text="EU"
+            />
     </LinearLayout>
 
 </LinearLayout>

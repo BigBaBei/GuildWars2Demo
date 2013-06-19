@@ -140,4 +140,5 @@ The region a world is in can be determined by its world_id:
         "Diessa Plateau"
     };
 
+    public static final String URL_WIKI = "http://wiki.guildwars2.com";
 }

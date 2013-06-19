@@ -1,5 +1,8 @@
 package com.example.guildwarseventdemo.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.guildwarseventdemo.setting.GlobalSettings;
 
 /**
@@ -7,7 +10,7 @@ import com.example.guildwarseventdemo.setting.GlobalSettings;
  * @author peng
  *
  */
-public class EventsResult {
+public class EventsResult implements Parcelable {
     private String world_name;
     private String map_name;
     private String event_name;
@@ -26,6 +29,7 @@ public class EventsResult {
         world_name = w_name;
         map_name = m_name;
         event_name = e_name;
+        state = stat;
         this.time = time;
     }
     
@@ -43,5 +47,15 @@ public class EventsResult {
     
     public String getState() {
         return state;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        
     }
 }

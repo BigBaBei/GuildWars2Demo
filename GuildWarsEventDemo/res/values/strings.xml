@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
-    <string name="app_name">GuildWarsEventDemo</string>
+    <string name="app_name">Guild Wars 2</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="about_title">Guild Wars2 API Demo \t- PercyOMG Presents </string> 
+    <string name="about_content">This is a demo just for study. If you have any good suggestions or find any bugs,contact me please.</string>
+    <string name="about_email">My email is dxpengyi1990@gmail.com.\nHave fun!</string>
 </resources>

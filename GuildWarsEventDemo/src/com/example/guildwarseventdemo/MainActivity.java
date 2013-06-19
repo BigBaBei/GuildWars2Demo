@@ -1,22 +1,29 @@
 package com.example.guildwarseventdemo;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.guildwarseventdemo.fragments.EventsFragment;
+import com.example.guildwarseventdemo.fragments.ProgressDialogFragment;
 import com.example.guildwarseventdemo.fragments.WikiFragment;
+import com.example.guildwarseventdemo.setting.GlobalSettings;
 
 public class MainActivity extends FragmentActivity {
-      
+    
     private DrawerLayout m_drawerLayout = null;
     private ListView m_lvLeftDrawer = null;
     private ActionBarDrawerToggle m_drawerToggle = null;
@@ -53,7 +60,6 @@ public class MainActivity extends FragmentActivity {
         }
     }
     
-    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,8 +68,21 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
     
-    
-    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+        case R.id.id_menu_about:
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.about_title)
+            .setView(LayoutInflater.from(this).inflate(R.layout.about_content, null))
+            .setPositiveButton("Close", null);
+            builder.create().show();
+            break;
+        }
+        return true;
+    }
+
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -89,6 +108,13 @@ public class MainActivity extends FragmentActivity {
         }
         super.onBackPressed();
     }
+    
+    @Override
+    protected void onDestroy() {
+        GlobalSettings.INSTANCE.saveSettings();
+        super.onDestroy();
+    }
+
 
 
     private void init() {
@@ -121,6 +147,7 @@ public class MainActivity extends FragmentActivity {
         
         getActionBar().setDisplayHomeAsUpEnabled(true);
 //        getActionBar().setHomeButtonEnabled(true);
+        GlobalSettings.INSTANCE.init(this);
     }
     
     private class TitlesClickLitener implements ListView.OnItemClickListener {
@@ -132,8 +159,8 @@ public class MainActivity extends FragmentActivity {
             //Close the left panel when clicking the item of list view.
             m_drawerLayout.closeDrawer(m_lvLeftDrawer);
             
-            //TODO:Always clear the backstack of dynamic events ui when any other ui or reenter it for now.
-            m_fragManager.popBackStack(EventsFragment.STACK_NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            //TODO:Always clear the backstack of dynamic events ui when go to any other ui or reenter it for now.
+            m_fragManager.popBackStack(ProgressDialogFragment.STACK_NAME, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             
             selectItem(position);
         }

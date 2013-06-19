@@ -3,10 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    <ProgressBar android:id="@+id/id_pb_wiki_progress"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:max="100"
+        style="@style/DotProgressBar"
+        />
+<!--  style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal" -->
+
     <WebView 
         android:id="@+id/id_wv_wiki"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#71C671"/>
+        />
 
 </LinearLayout>

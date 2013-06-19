@@ -72,16 +72,24 @@ public class HttpRequestUtils {
         ArrayList<Event> result = new ArrayList<Event>();
         JSONArray jsonArray = (new JSONObject(resultJson)).getJSONArray(CommonConstant.TAG_ARRAY_EVENT);
         
+        ArrayList<String> filterList = new ArrayList<String>();
+        for(int i=0,size=CommonConstant.DRAG_EVENT.length;i<size;i++) {
+            filterList.add(CommonConstant.DRAG_EVENT[i]);
+        }
+        
         for(int i=0,size=jsonArray.length();i<size;i++) {
             JSONObject jObject = jsonArray.optJSONObject(i);
             
             if(jObject==null) continue;
             
-            int world_id = jObject.getInt(CommonConstant.TAG_WORDL_ID);
-            int map_id = jObject.getInt(CommonConstant.TAG_MAP_ID);
+            
             String event_id = jObject.getString(CommonConstant.TAG_EVENT_ID);
-            String state = jObject.getString(CommonConstant.TAG_STATE);
-            result.add(new Event(world_id,map_id,event_id,state));
+            if(filterList.contains(event_id)) {
+                int world_id = jObject.getInt(CommonConstant.TAG_WORDL_ID);
+                int map_id = jObject.getInt(CommonConstant.TAG_MAP_ID);
+                String state = jObject.getString(CommonConstant.TAG_STATE);
+                result.add(new Event(world_id,map_id,event_id,state));
+            }
         }
         return result;
     }

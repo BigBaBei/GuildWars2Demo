@@ -1,8 +1,15 @@
 package com.example.guildwarseventdemo.fragments;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +18,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.guildwarseventdemo.R;
+import com.example.guildwarseventdemo.constant.CommonConstant;
+import com.example.guildwarseventdemo.entity.EventsResult;
 import com.example.guildwarseventdemo.setting.GlobalSettings;
+import com.example.guildwarseventdemo.tasks.DragonTimerTask;
+import com.example.guildwarseventdemo.utility.Utility;
 
 /**
  * It contains a gridview to show the worlds for user's selection.
@@ -29,6 +41,7 @@ public class WorldsFragment extends Fragment implements OnItemClickListener{
     
     private int m_index = 0;
     private String[] m_worlds = null;
+    
     /**
      * 0:US;1:EU.
      */
@@ -110,10 +123,10 @@ public class WorldsFragment extends Fragment implements OnItemClickListener{
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
         GlobalSettings.INSTANCE.setWorld(m_worlds[position]);
-        WikiFragment wikiFragment = new WikiFragment();
-        Bundle b4 = new Bundle();
-        wikiFragment.setArguments(b4);
-        m_onclickListener.onClick(wikiFragment);
+        
+        if(null!=m_onclickListener) {
+            m_onclickListener.onClick();
+        }
     }
     
     private void cutNullTailInArray() {
@@ -142,9 +155,9 @@ public class WorldsFragment extends Fragment implements OnItemClickListener{
     public interface onWorldClickListener {
         /**
          * Called when a world item clicked.
-         * @param f
          */
-        void onClick(WikiFragment f);
+        void onClick();
         
     }
+    
 }

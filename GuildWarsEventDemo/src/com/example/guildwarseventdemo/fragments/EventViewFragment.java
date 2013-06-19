@@ -3,23 +3,23 @@ package com.example.guildwarseventdemo.fragments;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import com.example.guildwarseventdemo.R;
-import com.example.guildwarseventdemo.constant.CommonConstant;
-import com.example.guildwarseventdemo.entity.EventsResult;
-import com.example.guildwarseventdemo.interfaces.OnTaskListener;
-import com.example.guildwarseventdemo.setting.GlobalSettings;
-import com.example.guildwarseventdemo.task.DragonTimerTask;
-import com.example.guildwarseventdemo.utility.Utility;
-
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.guildwarseventdemo.R;
+import com.example.guildwarseventdemo.constant.CommonConstant;
+import com.example.guildwarseventdemo.entity.EventsResult;
+import com.example.guildwarseventdemo.setting.GlobalSettings;
+import com.example.guildwarseventdemo.tasks.DragonTimerTask;
+import com.example.guildwarseventdemo.utility.Utility;
 
 /**
  * A fragment shows the dynamic events of specified world of a server.
@@ -31,12 +31,15 @@ public class EventViewFragment extends Fragment {
     
     private ListView m_lvEvents = null;
     
+    /**
+     * Event list to be shown.
+     */
     private ArrayList<EventsResult> m_eventsList = new ArrayList<EventsResult>();
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchEvents();
+        m_eventsList =getArguments().getParcelableArrayList(ProgressDialogFragment.EVENTS);
     }
 
     @Override
@@ -45,6 +48,7 @@ public class EventViewFragment extends Fragment {
         View v = inflater.inflate(R.layout.events_list, container, false);
         m_lvEvents = (ListView) v.findViewById(R.id.id_lv_events);
         
+        m_lvEvents.setAdapter(new EventAdapter(getActivity()));
         return v;
     }
     
@@ -53,44 +57,67 @@ public class EventViewFragment extends Fragment {
         super.onDestroy();
     }
     
-   /**
-    * Fetch dynamicEvents.
-    */
-    private void fetchEvents() {
-        if(Utility.isConnected(getActivity())) return;
+    /**
+     * The list view's adapter shows the content of events.
+     * @author peng
+     *
+     */
+    private class EventAdapter extends BaseAdapter {
         
-        int world_id = -1;
-        String world_name = GlobalSettings.INSTANCE.getWorld();
-        String[] worldNameArray = CommonConstant.WORLD_NAME_US;
-        if(GlobalSettings.INSTANCE.getServer().equals(CommonConstant.SERVER_US)) {
-            for(int i=0,size=CommonConstant.WORLD_NAME_US.length;i<size;i++) {
-                if(world_name.equals(worldNameArray[i])) {
-                    world_id = CommonConstant.WORLD_ID_US[i];
-                    break;
-                }
-            }
-            
-        }
-        else {
-            for(int i=0,size=CommonConstant.WORLD_NAME_EU.length;i<size;i++) {
-                if(world_name.equals(worldNameArray[i])) {
-                    world_id = CommonConstant.WORLD_ID_EU[i];
-                    break;
-                }
-            }
+        private LayoutInflater mInflater;
+        
+        public EventAdapter(Context c) {
+            mInflater = LayoutInflater.from(c);
         }
         
-        if(world_id==-1) return;
-        String strUrl = CommonConstant.url+CommonConstant.DANAMIC_EVENT+"?"+CommonConstant.TAG_WORDL_ID+"="+world_id;
-        DragonTimerTask task = new DragonTimerTask();
-        task.execute(strUrl);
-         
-         try {
-            m_eventsList = task.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        @Override
+        public int getCount() {
+            return m_eventsList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return m_eventsList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            EventsResult result = m_eventsList.get(position);
+            if(convertView==null) {
+                convertView  = mInflater.inflate(R.layout.events_list_item, null);
+                holder = new ViewHolder();
+                holder.event = (TextView) convertView.findViewById(R.id.id_tv_event_name);
+                holder.map = (TextView) convertView.findViewById(R.id.id_tv_map_name);
+                holder.state = (TextView) convertView.findViewById(R.id.id_tv_state);
+                
+                convertView.setTag(holder);
+            }
+            else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            if(result!=null) {
+                holder.event.setText(result.getEventName());
+                holder.map.setText(result.getMapName());
+                holder.state.setText(result.getState());
+            }
+            return convertView;
+        }
+        
+        /**
+         * Hold the reusable resource IDs.
+         * @author peng
+         *
+         */
+        class ViewHolder {
+            TextView event;
+            TextView map;
+            TextView state;
         }
     }
 }
