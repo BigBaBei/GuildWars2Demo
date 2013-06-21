@@ -5,7 +5,7 @@
     android:orientation="vertical" >
     <ProgressBar android:id="@+id/id_pb_wiki_progress"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="10dp"
         android:max="100"
         style="@style/DotProgressBar"
         />

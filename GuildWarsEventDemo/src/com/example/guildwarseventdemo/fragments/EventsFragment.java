@@ -3,14 +3,8 @@ package com.example.guildwarseventdemo.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -19,19 +13,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.example.guildwarseventdemo.MainActivity.onBackListener;
 import com.example.guildwarseventdemo.MainActivity;
+import com.example.guildwarseventdemo.MainActivity.onBackListener;
 import com.example.guildwarseventdemo.R;
+import com.example.guildwarseventdemo.animation.RotateZAnimation;
 import com.example.guildwarseventdemo.constant.CommonConstant;
 import com.example.guildwarseventdemo.fragments.ProgressDialogFragment.FecthEventsCallBack;
 import com.example.guildwarseventdemo.fragments.WorldsFragment.onWorldClickListener;
 import com.example.guildwarseventdemo.setting.GlobalSettings;
+import com.example.guildwarseventdemo.widgets.MirroredTextView;
 
 /**
  * The fragment represents the content of the events.
@@ -48,6 +49,10 @@ public class EventsFragment extends Fragment {
     private FrameLayout m_flEvents = null;
     private LinearLayout  m_pageLayout = null;
     
+    private ViewGroup m_vgTitle = null;
+    private MirroredTextView m_tvMirroredTitle = null;
+    private MirroredTextView m_tvTitle = null;
+    
     private FragmentManager m_fragManager = null;
     
     //Worlds Fragment.
@@ -63,6 +68,14 @@ public class EventsFragment extends Fragment {
     private ImageView[] m_pageDotimage = null;
     private int m_prevPos = 0;
     
+    //Animation
+    /**
+     * change creation state: eu and us textview title is normal.
+     */
+    private boolean m_isMirrored = false;
+    
+    private int m_prevBtnClickedId = 0;
+    
     private OnClickListener m_onClickListener = new OnClickListener(){
 
         @Override
@@ -74,21 +87,104 @@ public class EventsFragment extends Fragment {
             }
             switch(v.getId()) {
             case R.id.id_btn_eu:
+                if(m_prevBtnClickedId==v.getId()) return;
                 GlobalSettings.INSTANCE.setServer(CommonConstant.SERVER_EU);
                 m_viewPager.setAdapter(m_adapterEU);
                 addPageDot(m_fragmentEU.length);
                 currentPageDot(0,0);
+                changeTitle(true,180,90);
                 break;
             case R.id.id_btn_us:
+                if(m_prevBtnClickedId==v.getId()) return;
                 GlobalSettings.INSTANCE.setServer(CommonConstant.SERVER_US);
                 m_viewPager.setAdapter(m_adapterUS);
                 addPageDot(m_fragmentUS.length);
                 currentPageDot(0,0);
+                changeTitle(false,0,90);
                 break;
             }
+            m_prevBtnClickedId = v.getId();
         }
         
     };
+    
+    private final class DisplayNextView implements Animation.AnimationListener {
+        private final boolean isReverse;
+        
+        public DisplayNextView(boolean isReverse) {
+            this.isReverse = isReverse;
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+            
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+//            m_vgTitle.post(new SwapViews(isReverse));
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+            
+        }
+        
+    }
+    
+    private final class SwapViews implements Runnable {
+        private final boolean isReverse;
+        
+        public SwapViews(boolean isReverse) {
+            this.isReverse = isReverse;
+        }
+
+        @Override
+        public void run() {
+            final float centerX = m_tvMirroredTitle.getWidth()/2.0f;
+            final float centerY = m_tvMirroredTitle.getHeight()/2.0f;
+            RotateZAnimation anim = null;
+            if(isReverse) {
+                m_tvTitle.setText(GlobalSettings.INSTANCE.getServer());
+                m_tvTitle.setVisibility(View.VISIBLE);
+                m_tvMirroredTitle.setVisibility(View.GONE);
+                
+                Log.d("peng","m_tvTitle: "+m_tvTitle.getText());
+                
+                anim = new RotateZAnimation(90, 0, centerX, centerY, 0, false);
+            }
+            else {
+                m_tvMirroredTitle.setText(GlobalSettings.INSTANCE.getServer());
+                m_tvMirroredTitle.setVisibility(View.VISIBLE);
+                m_tvTitle.setVisibility(View.GONE);
+                
+                Log.d("peng","m_tvMirroredTitle: "+m_tvMirroredTitle.getText());
+                
+                anim = new RotateZAnimation(90, 180, centerX, centerY, 0, false);
+            }
+            
+            anim.setFillAfter(true);
+            anim.setDuration(500);
+            anim.setInterpolator(new AccelerateDecelerateInterpolator());
+            m_vgTitle.startAnimation(anim);
+        }
+        
+    }
+    
+    private void changeTitle(boolean isReverse,int start, int end) {
+        if(!m_isMirrored) {
+//            m_tvMirroredTitle.setMirroredText(true);
+        }
+        float centerX = m_tvMirroredTitle.getWidth()/2;
+        float centerY = m_tvMirroredTitle.getHeight()/2;
+        RotateZAnimation anim = null;
+        anim = new RotateZAnimation(start, end, centerX, centerY, 0, isReverse);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.setDuration(500);
+        anim.setAnimationListener(new DisplayNextView(isReverse));
+        m_vgTitle.startAnimation(anim);
+        
+    }
     
     //Wolrd item click listener.
     private onWorldClickListener m_onWorldClickListener = new onWorldClickListener() {
@@ -97,7 +193,6 @@ public class EventsFragment extends Fragment {
         public void onClick() {
             
             ProgressDialogFragment pdf = ProgressDialogFragment.newInstance(getActivity());
-            Bundle b = new Bundle();
             pdf.setFectchEventsCallBack(m_fetchEventsCallback);
             pdf.show(m_fragManager, null);
             
@@ -149,9 +244,16 @@ public class EventsFragment extends Fragment {
         m_btnEU = (Button) v.findViewById(R.id.id_btn_eu);
         m_flEvents = (FrameLayout)v.findViewById(R.id.id_fl_events);
         m_pageLayout = (LinearLayout)v.findViewById(R.id.id_ll_page);
+        m_vgTitle = (ViewGroup)v.findViewById(R.id.id_fl_world_title);
+        m_tvMirroredTitle =  (MirroredTextView) v.findViewById(R.id.id_tv_world_server);
+        m_tvTitle = (MirroredTextView) v.findViewById(R.id.id_tv_world_server_reverse);
+        
+        m_tvMirroredTitle.setText(GlobalSettings.INSTANCE.getServer());
         
         m_btnUS.setOnClickListener(m_onClickListener);
         m_btnEU.setOnClickListener(m_onClickListener);
+        
+        m_prevBtnClickedId = GlobalSettings.INSTANCE.getServer().equals(CommonConstant.SERVER_EU)?R.id.id_btn_eu:R.id.id_btn_us;
         
         return v;
     }
@@ -272,6 +374,7 @@ public class EventsFragment extends Fragment {
         m_flEvents.setVisibility(View.VISIBLE);
         m_viewPager.setVisibility(View.GONE);
         m_pageLayout.setVisibility(View.GONE);
+        m_vgTitle.setVisibility(View.GONE);
     }
     
     /**
@@ -282,6 +385,7 @@ public class EventsFragment extends Fragment {
         m_pageLayout.setAnimation(AnimationUtils.makeInChildBottomAnimation(getActivity()));
         m_viewPager.setVisibility(View.VISIBLE);
         m_pageLayout.setVisibility(View.VISIBLE);
+        m_vgTitle.setVisibility(View.VISIBLE);
         m_flEvents.setVisibility(View.GONE);
     }
     
@@ -302,6 +406,11 @@ public class EventsFragment extends Fragment {
         }
     }
     
+    /**
+     * Set the current dot of page to red.
+     * @param prevPos
+     * @param pos
+     */
     private void currentPageDot(int prevPos,int pos) {
         ImageView imageDot = (ImageView) LayoutInflater.from(getActivity()).inflate(R.layout.page_dot_view, null);
         Bitmap v = BitmapFactory.decodeResource(getResources(), R.drawable.viewpager_selected);

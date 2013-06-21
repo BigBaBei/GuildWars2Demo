@@ -1,15 +1,8 @@
 package com.example.guildwarseventdemo.fragments;
 
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +11,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.guildwarseventdemo.R;
-import com.example.guildwarseventdemo.constant.CommonConstant;
-import com.example.guildwarseventdemo.entity.EventsResult;
 import com.example.guildwarseventdemo.setting.GlobalSettings;
-import com.example.guildwarseventdemo.tasks.DragonTimerTask;
-import com.example.guildwarseventdemo.utility.Utility;
 
 /**
  * It contains a gridview to show the worlds for user's selection.
@@ -96,7 +83,8 @@ public class WorldsFragment extends Fragment implements OnItemClickListener{
         m_gridView = (GridView) v.findViewById(R.id.id_gv_worlds);
         
         if(m_worlds!=null) {
-            m_gridView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, m_worlds));
+//            m_gridView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, m_worlds));
+            m_gridView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.world_layout, m_worlds));
         }
         
         m_gridView.setOnItemClickListener(this);

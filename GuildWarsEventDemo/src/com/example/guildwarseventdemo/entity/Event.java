@@ -11,6 +11,7 @@ public class Event {
     public static final String ACTIVE = "Active";
     public static final String SUCCESS = "Success";
     public static final String FAIL = "Fail";
+    public static final String INACTIVE = "Inactive";
     
     public Event(int w_id, int m_id, String e_id,String state){
         world_id = w_id;
